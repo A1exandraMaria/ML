@@ -1,0 +1,44 @@
+import streamlit as st
+import matplotlib.pyplot as plt
+import torch
+import torch.nn.functional as F
+import numpy as np
+
+def relu(x):
+    return F.relu(x)
+
+def gelu(x):
+    return F.gelu(x)
+
+def plot_functions(vector, relu_output, gelu_output):
+    # Creating the plot
+    fig, ax = plt.subplots()
+    ax.plot(vector, 'r.-', label='Input')  # Input vector
+    ax.plot(relu_output, 'b.-', label='ReLU Output')  # ReLU output
+    ax.plot(gelu_output, 'g.-', label='GELU Output')  # GELU output
+    ax.set_xlabel('Index')
+    ax.set_ylabel('Value')
+    ax.legend()
+    st.pyplot(fig)
+
+    st.write(f"ReLU Output Vector: {relu_output}")
+    st.write(f"GELU Output Vector: {gelu_output}")
+
+def main():
+    min_val = st.number_input("Enter minimum value: ", value=0.0)
+    max_val = st.number_input("Enter maximum value: ", value=10.0)
+    step = st.number_input("Enter step value: ", value=1.0)
+
+    vector = np.arange(min_val, max_val + step, step)
+    tensor = torch.tensor(vector)
+
+    # Calculating ReLU and GELU for the given vector
+    relu_output = relu(tensor).numpy()
+    gelu_output = gelu(tensor).numpy()
+
+    # Plotting and displaying the vectors
+    plot_functions(vector, relu_output, gelu_output)
+
+if __name__ == "__main__":
+    st.title('ReLU and GELU Demonstration')
+    main()
